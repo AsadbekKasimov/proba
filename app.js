@@ -214,8 +214,7 @@ if (product.badge === 'new') {
             `).join('')}
         </div>
     </div>
-
-    <div class="product-price">${formatPrice(product.price)}</div>
+<div class="product-price">${formatPrice(product.price)}</div>
 
 <div class="product-name">${product.name}</div>
 
@@ -231,11 +230,7 @@ ${product.pack_qty ? `
         <circle cx="20" cy="21" r="1" fill="currentColor"/>
     </svg>
 </button>
-
-
-    
-
-   
+ `;
     
     card.querySelector('.favorite-btn').addEventListener('click', (e) => {
         e.stopPropagation();
