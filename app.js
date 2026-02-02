@@ -6,12 +6,9 @@ let modalMode = 'catalog'; // catalog | cart
 let currentCartIndex = null;
 
 async function fetchProducts() {
-  const res = await fetch("https://script.google.com/macros/s/AKfycbzfInxxuIsDv4IDDEqwYIWQWKaWsD_aQ7J6rlYiihqHNd5riIiPtC9afqSrl0ijz6gd5w/exec");
+  const res = await fetch("https://script.google.com/macros/s/AKfycbxgoLRxCH-sRFYarW2S2Sz15zZUCQETk8vG3HZdsdom0P-GZMcvfGEc7oBt4mrNhNQrDQ/exec");
   productsData = await res.json();
-  console.log('productsData:', productsData);   // 👈 ВОТ СЮДА
-
   allProducts = Object.values(productsData).flat();
-  console.log('allProducts:', allProducts);     // 👈 И СЮДА
 
   renderProducts();
 }
