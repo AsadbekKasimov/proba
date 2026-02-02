@@ -216,17 +216,22 @@ if (product.badge === 'new') {
     </div>
 
     <div class="product-price">${formatPrice(product.price)}</div>
-    <div class="product-name">${product.name}</div>
 
-    <button class="product-add-btn">
-        <span class="btn-text">Добавить в</span>
-        <svg class="cart-icon" viewBox="0 0 24 24" fill="none">
-            <path d="M7 4H3V6H5L8.6 13.6L7.25 15.05C6.47 15.83 7.02 17 8.12 17H19V15H8.42L9.1 14H15.55C16.3 14 16.96 13.59 17.3 12.97L21 6H7.42L6.7 4Z" fill="currentColor"/>
-            <circle cx="9" cy="21" r="1" fill="currentColor"/>
-            <circle cx="20" cy="21" r="1" fill="currentColor"/>
-        </svg>
-    </button>
-`;
+<div class="product-name">${product.name}</div>
+
+${product.pack_qty ? `
+  <div class="product-pack">Упаковка: ${product.pack_qty} шт</div>
+` : ''}
+
+<button class="product-add-btn">
+    <span class="btn-text">Добавить в</span>
+    <svg class="cart-icon" viewBox="0 0 24 24" fill="none">
+        <path d="M7 4H3V6H5L8.6 13.6L7.25 15.05C6.47 15.83 7.02 17 8.12 17H19V15H8.42L9.1 14H15.55C16.3 14 16.96 13.59 17.3 12.97L21 6H7.42L6.7 4Z" fill="currentColor"/>
+        <circle cx="9" cy="21" r="1" fill="currentColor"/>
+        <circle cx="20" cy="21" r="1" fill="currentColor"/>
+    </svg>
+</button>
+
 
     
 
