@@ -6,7 +6,7 @@ let modalMode = 'catalog'; // catalog | cart
 let currentCartIndex = null;
 
 async function fetchProducts() {
-  const res = await fetch("https://script.google.com/macros/s/AKfycbw0OOkapBJF-aQXSGVYlPPLwRPXc5hS3XTfc43sWFmQcEcgFyZNw1bYm_oLirEBf9zB2w/exec");
+  const res = await fetch("https://script.google.com/macros/s/AKfycbzfInxxuIsDv4IDDEqwYIWQWKaWsD_aQ7J6rlYiihqHNd5riIiPtC9afqSrl0ijz6gd5w/exec");
   productsData = await res.json();
   console.log('productsData:', productsData);   // 👈 ВОТ СЮДА
 
