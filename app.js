@@ -130,8 +130,7 @@ function setupEventListeners() {
         });
 
     // Checkout
-   document.getElementById('checkout-btn')
-  .addEventListener('click', showConfirmationDialog);
+    document.getElementById('checkout-btn').addEventListener('click', checkout);
     document.getElementById('clear-cart-top')?.addEventListener('click', () => {
         if (!confirm('Очистить корзину?')) return;
 
@@ -249,43 +248,42 @@ function filterProducts(query) {
 
 // ==================== КЛЮЧЕВОЕ ИЗМЕНЕНИЕ: CHECKOUT ====================
 function confirmCheckout() {
-    if (!cart || cart.length === 0) {
-        alert("Корзина пуста");
-        return;
-    }
-
-    const total = cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-    );
-
+    const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    
+    // ✅ НОВОЕ: Отправляем только ID и количество (минимальный JSON)
     const orderData = {
         items: cart.map(item => ({
-            id: item.id,
-            quantity: item.quantity   // 👈 важно: quantity или qty
+            id: item.id,          // Только ID товара
+            qty: item.quantity    // Только количество
+            // ❌ НЕ отправляем name, price, image - всё получим из Google Sheets
         })),
-        total: total
+        total: total,
+        user_id: tg.initDataUnsafe?.user?.id || 0
     };
-
-    console.log("📦 SEND TO BOT:", orderData);
-
-    Telegram.WebApp.sendData(JSON.stringify(orderData));
-
-    // ❌ ВАЖНО: НЕ закрываем сразу
-    // Telegram.WebApp.close();
-
+    
+    console.log('Sending minimal order data:', JSON.stringify(orderData));
+    
+    // Send data back to bot
+    tg.sendData(JSON.stringify(orderData));
+    
+    // Save order to localStorage for history
+    const orders = JSON.parse(localStorage.getItem('orders')) || [];
+    orders.unshift({
+        id: Date.now(),
+        date: new Date().toLocaleDateString('ru-RU'),
+        total: total,
+        items: cart.length
+    });
+    localStorage.setItem('orders', JSON.stringify(orders));
+    
+    // Clear cart
     cart = [];
     saveCart();
     updateCartBadge();
-
+    
     closeConfirmationDialog();
-
-    // ⏳ даём Telegram время
-    setTimeout(() => {
-        Telegram.WebApp.close();
-    }, 300);
+    tg.close();
 }
-
 
 // Modal
 function openModal(product) {
@@ -594,33 +592,10 @@ function loadUserOrders() {
 }
 
 // Checkout
-function checkout() {}
-
-    const total = cart.reduce(
-        (sum, item) => sum + item.price * item.quantity,
-        0
-    );
-
-    const orderData = {
-        items: cart.map(item => ({
-            id: item.id,
-            name: item.name,
-            price: item.price,
-            quantity: item.quantity
-        })),
-        total: total
-    };
-
-    console.log("📦 SEND TO BOT:", orderData);
-
-   Telegram.WebApp.sendData(JSON.stringify(orderData));
-
-// ⏳ даём Telegram время отправить данные
-setTimeout(() => {
-    Telegram.WebApp.close();
-}, 500);
-
-
+function checkout() {
+    if (cart.length === 0) return;
+    showConfirmationDialog();
+}
 
 function showConfirmationDialog() {
     const modal = document.getElementById('confirmation-modal');
