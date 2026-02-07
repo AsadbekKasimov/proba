@@ -593,9 +593,35 @@ function loadUserOrders() {
 
 // Checkout
 function checkout() {
-    if (cart.length === 0) return;
-    showConfirmationDialog();
+    if (!cart || cart.length === 0) {
+        alert("Корзина пуста");
+        return;
+    }
+
+    const total = cart.reduce(
+        (sum, item) => sum + item.price * item.quantity,
+        0
+    );
+
+    const orderData = {
+        items: cart.map(item => ({
+            id: item.id,
+            name: item.name,
+            price: item.price,
+            quantity: item.quantity
+        })),
+        total: total
+    };
+
+    console.log("📦 SEND TO BOT:", orderData);
+
+    // 🔴 КЛЮЧЕВО — без этого бот ничего не получит
+    Telegram.WebApp.sendData(JSON.stringify(orderData));
+
+    // можно закрыть WebApp
+    Telegram.WebApp.close();
 }
+
 
 function showConfirmationDialog() {
     const modal = document.getElementById('confirmation-modal');
