@@ -313,7 +313,7 @@ function openModal(product) {
     const qtyInput = document.getElementById('qty-input');
     qtyInput.oninput = () => {
         let val = parseInt(qtyInput.value, 10);
-        if (isNaN(val) || val < 1) qtyInput.value = 1;
+        if (isNaN(val) || val < 1) qtyInput.value ='';
         else qtyInput.value = val;
     };
     
