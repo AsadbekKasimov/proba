@@ -308,7 +308,7 @@ function openModal(product) {
     document.getElementById('modal-title').textContent = product.name;
     document.getElementById('modal-description').textContent = product.description;
     document.getElementById('modal-price').textContent = formatPrice(product.price);
-    document.getElementById('qty-input').value = 1;
+    document.getElementById('qty-input').value ='';
 
     const qtyInput = document.getElementById('qty-input');
     qtyInput.oninput = () => {
