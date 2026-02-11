@@ -199,13 +199,6 @@ const tg = window.Telegram.WebApp;
 tg.ready();
 tg.expand();
 
-// ===== SEAMLESS HEADER =====
-tg.setHeaderColor('secondary_bg_color');
-tg.setBackgroundColor('#F5F5F7');
-
-// убирает резкий переход
-document.body.style.background = '#F5F5F7';
-
 
 // State Management
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
