@@ -735,7 +735,7 @@ function confirmCheckout() {
     const orderData = {
         items: cart.map(item => ({
             id: item.id,
-            quantity: item.quantity
+            qty: item.quantity
         })),
         total: total,
         user: tg.initDataUnsafe?.user || null
