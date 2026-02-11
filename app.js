@@ -20,7 +20,6 @@ async function fetchProducts() {
     renderGroupButtons();
     setupScrollSpy();
     hideLoader();
-
 }
 
 // Группировка товаров по полю group
@@ -823,3 +822,4 @@ function hideLoader(){
       loader.style.display = "none";
    },500);
 }
+
