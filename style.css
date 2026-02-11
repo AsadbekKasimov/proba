@@ -970,7 +970,7 @@ body {
 }
 
 .loader-logo{
-  width:300px;
+  width:250px;
   animation:pulse 1s infinite alternate;
 }
 
