@@ -19,6 +19,8 @@ async function fetchProducts() {
     renderGroupedProducts();
     renderGroupButtons();
     setupScrollSpy();
+    hideLoader();
+
 }
 
 // Группировка товаров по полю group
@@ -810,3 +812,14 @@ document.addEventListener('DOMContentLoaded', () => {
     updateCartBadge();
     loadUserProfile();
 });
+
+function hideLoader(){
+   const loader = document.getElementById("loader");
+   if(!loader) return;
+
+   loader.style.opacity = "0";
+
+   setTimeout(()=>{
+      loader.style.display = "none";
+   },500);
+}
