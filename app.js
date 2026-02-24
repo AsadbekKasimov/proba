@@ -606,24 +606,21 @@ async function syncCartToCloud(){
     if(!user) return;
 
     try{
-
         isSyncingCart = true;
 
-        await fetch("https://script.google.com/macros/s/AKfycbwRqDG46pvcs8sBACR_AjmqnwQ03lWCwS412BitTi8V76UFu4QLV8CcdB2lNwlQJI_t/exec",{
-            method:"POST",
-            headers:{
-                "Content-Type":"application/json"
-            },
-            body:JSON.stringify({
-                user_id:user.id,
-                cart:cart
+        await fetch("https://script.google.com/macros/s/AKfycbwYJkr0ENEXoxy3VwvRnfeVczBUSbTSwRxFbSmPhXKx720c480LI99cxOOKfp0kt5k/exec", {
+            method: "POST",
+            mode: "no-cors",
+            body: JSON.stringify({
+                user_id: user.id,
+                cart: cart
             })
         });
 
     }catch(e){
-        console.log("sync error",e);
+        console.log("sync error", e);
     }finally{
-        isSyncingCart=false;
+        isSyncingCart = false;
     }
 }
 
@@ -638,7 +635,7 @@ async function realtimeCartSync(){
 
     try{
 
-        const res = await fetch("https://script.google.com/macros/s/AKfycbwRqDG46pvcs8sBACR_AjmqnwQ03lWCwS412BitTi8V76UFu4QLV8CcdB2lNwlQJI_t/exec?user_id="+user.id);
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwYJkr0ENEXoxy3VwvRnfeVczBUSbTSwRxFbSmPhXKx720c480LI99cxOOKfp0kt5k/exec?user_id="+user.id);
         const cloudCart = await res.json();
 
         if(!Array.isArray(cloudCart)) return;
