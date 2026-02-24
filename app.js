@@ -202,6 +202,12 @@ tg.expand();
 
 // State Management
 let cart = JSON.parse(localStorage.getItem('cart')) || [];
+
+let cartSyncTimer = null;
+let isSyncingCart = false;
+let lastCartHash = null;
+let realtimeCartTimer = null;
+
 let favorites = JSON.parse(localStorage.getItem('favorites')) || [];
 
 // Event Listeners
@@ -581,9 +587,95 @@ function renderCart() {
     document.getElementById('cart-total-amount').textContent = formatPrice(total);
 }
 
-function saveCart() {
+async function saveCart() {
+
     localStorage.setItem('cart', JSON.stringify(cart));
+
+    if(cartSyncTimer){
+        clearTimeout(cartSyncTimer);
+    }
+
+    cartSyncTimer = setTimeout(syncCartToCloud,1200);
 }
+
+async function syncCartToCloud(){
+
+    if(isSyncingCart) return;
+
+    const user = tg.initDataUnsafe?.user;
+    if(!user) return;
+
+    try{
+
+        isSyncingCart = true;
+
+        await fetch("https://script.google.com/macros/s/AKfycbwRqDG46pvcs8sBACR_AjmqnwQ03lWCwS412BitTi8V76UFu4QLV8CcdB2lNwlQJI_t/exec",{
+            method:"POST",
+            headers:{
+                "Content-Type":"application/json"
+            },
+            body:JSON.stringify({
+                user_id:user.id,
+                cart:cart
+            })
+        });
+
+    }catch(e){
+        console.log("sync error",e);
+    }finally{
+        isSyncingCart=false;
+    }
+}
+
+function getCartHash(cartData){
+    return JSON.stringify(cartData);
+}
+
+async function realtimeCartSync(){
+
+    const user = tg.initDataUnsafe?.user;
+    if(!user) return;
+
+    try{
+
+        const res = await fetch("https://script.google.com/macros/s/AKfycbwRqDG46pvcs8sBACR_AjmqnwQ03lWCwS412BitTi8V76UFu4QLV8CcdB2lNwlQJI_t/exec?user_id="+user.id);
+        const cloudCart = await res.json();
+
+        if(!Array.isArray(cloudCart)) return;
+
+        const newHash = getCartHash(cloudCart);
+
+        if(newHash === lastCartHash) return;
+
+        lastCartHash = newHash;
+
+        cart = cloudCart;
+
+        localStorage.setItem('cart',JSON.stringify(cart));
+
+        updateCartBadge();
+
+        if(document.getElementById('cart-page').classList.contains('active')){
+            renderCart();
+        }
+
+    }catch(e){
+        console.log("realtime error",e);
+    }
+}
+
+function startRealtimeCart(){
+
+    if(realtimeCartTimer){
+        clearInterval(realtimeCartTimer);
+    }
+
+    realtimeCartTimer = setInterval(()=>{
+        realtimeCartSync();
+    },5000);
+}
+
+
 
 function updateCartBadge() {
     const badge = document.getElementById('cart-badge');
@@ -811,6 +903,7 @@ document.addEventListener('DOMContentLoaded', () => {
     setupEventListeners();
     updateCartBadge();
     loadUserProfile();
+    startRealtimeCart();
 });
 
 function hideLoader(){
