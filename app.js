@@ -569,7 +569,7 @@ function renderCart() {
         const cartImage = product.images?.[0] || product.image;
 
         el.innerHTML = `
-            <img src="${product.image}" class="cart-item-image">
+            <img src="${cartImage}" class="cart-item-image">
             <div class="cart-item-info">
                 <div class="cart-item-name">${product.name}</div>
                 <div class="cart-item-price">${formatPrice(product.price)}</div>
