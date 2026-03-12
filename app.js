@@ -504,7 +504,7 @@ function addToCartFromModal() {
             id: currentProduct.id,
             name: currentProduct.name,
             price: currentProduct.price,
-            image: currentProduct.image,
+            image: currentProduct.images?.[0] || currentProduct.image, // ← первое фото
             quantity: qty
         });
     }
@@ -565,6 +565,8 @@ function renderCart() {
 
         const el = document.createElement('div');
         el.className = 'cart-item';
+
+        const cartImage = product.images?.[0] || product.image;
 
         el.innerHTML = `
             <img src="${product.image}" class="cart-item-image">
