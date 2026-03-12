@@ -881,7 +881,9 @@ function formatPrice(price) {
     return new Intl.NumberFormat('uz-UZ').format(price) + ' сум';
 }
 
-// Slider Swipe
+// Slider Swipe (touch + mouse)
+let sliderMouseStart = null;
+
 document.addEventListener('touchstart', e => {
     const slider = e.target.closest('.slider');
     if (!slider) return;
@@ -891,22 +893,33 @@ document.addEventListener('touchstart', e => {
 document.addEventListener('touchend', e => {
     const slider = e.target.closest('.slider');
     if (!slider) return;
+    moveSlider(slider, e.changedTouches[0].clientX - slider.startX);
+});
 
+document.addEventListener('mousedown', e => {
+    const slider = e.target.closest('.slider');
+    if (!slider) return;
+    slider.startX = e.clientX;
+    sliderMouseStart = slider;
+});
+
+document.addEventListener('mouseup', e => {
+    if (!sliderMouseStart) return;
+    moveSlider(sliderMouseStart, e.clientX - sliderMouseStart.startX);
+    sliderMouseStart = null;
+});
+
+function moveSlider(slider, diff) {
     const slides = slider.querySelector('.slides');
     const dots = slider.querySelectorAll('.dot');
     const count = slides.children.length;
-
     let index = +slider.dataset.index;
-    const diff = e.changedTouches[0].clientX - slider.startX;
-
     if (diff < -50 && index < count - 1) index++;
     if (diff > 50 && index > 0) index--;
-
     slider.dataset.index = index;
     slides.style.transform = `translateX(-${index * 100}%)`;
-
     dots.forEach((d, i) => d.classList.toggle('active', i === index));
-});
+}
 
 // Zoom on tap
 document.addEventListener('click', e => {
@@ -926,9 +939,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function hideLoader(){
    const loader = document.getElementById("loader");
    if(!loader) return;
-
    loader.style.opacity = "0";
-
    setTimeout(()=>{
       loader.style.display = "none";
    },500);
