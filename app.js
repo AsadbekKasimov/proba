@@ -944,4 +944,3 @@ function hideLoader(){
       loader.style.display = "none";
    },500);
 }
-
