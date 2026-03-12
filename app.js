@@ -13,15 +13,26 @@ async function fetchProducts() {
     const res = await fetch("https://script.google.com/macros/s/AKfycbxgoLRxCH-sRFYarW2S2Sz15zZUCQETk8vG3HZdsdom0P-GZMcvfGEc7oBt4mrNhNQrDQ/exec");
     productsData = await res.json();
     allProducts = Object.values(productsData).flat().map(product => {
-        if (product.image && product.image.includes(',')) {
-            product.images = product.image.split(",").map(i => i.trim());
+
+        if (product.image) {
+            let urls = [];
+            if (product.image.includes(',')) {
+                urls = product.image.split(',');
+            } else if (product.image.includes(';')) {
+                urls = product.image.split(';');
+            } else {
+                urls = [product.image];
+            }
+            product.images = urls.map(i => i.trim());
         } else {
-            product.images = [product.image];
+            product.images = [];
         }
+
+        console.log(product.name, JSON.stringify(product.images)); // для отладки
+
         return product;
     });
 
-    // Группируем товары по полю "group"
     groupProductsByGroup();
     renderGroupedProducts();
     renderGroupButtons();
