@@ -12,7 +12,14 @@ let currentCartIndex = null;
 async function fetchProducts() {
     const res = await fetch("https://script.google.com/macros/s/AKfycbxgoLRxCH-sRFYarW2S2Sz15zZUCQETk8vG3HZdsdom0P-GZMcvfGEc7oBt4mrNhNQrDQ/exec");
     productsData = await res.json();
-    allProducts = Object.values(productsData).flat();
+    allProducts = Object.values(productsData).flat().map(product => {
+
+        if (product.images) {
+            product.images = product.images.split(",").map(i => i.trim());
+        }
+
+        return product;
+    });
 
     // Группируем товары по полю "group"
     groupProductsByGroup();
