@@ -1,8 +1,9 @@
 // ==================== ГРУППОВОЙ КАТАЛОГ С SCROLL SPY ====================
 
+
 let productsData = {};
 let allProducts = [];
-let productsByGroup = {};
+let productsByGroup = {};    
 
 let currentProduct = null;
 let modalMode = 'catalog';
@@ -405,7 +406,11 @@ function createProductCard(product) {
     <div class="product-name">${product.name}</div>
 
     ${product.pack_qty ? `
-      <div class="product-pack">Упаковка: ${product.pack_qty} шт</div>
+    <div class="product-pack">
+    Упаковка: ${product.pack_qty} шт<br>
+    Вес: ${product.weight} кг<br>
+    Куб: ${product.cube} м³
+    </div>
     ` : ''}
 
     <button class="product-add-btn">
@@ -555,13 +560,19 @@ function renderCart() {
     summary.classList.remove('hidden');
 
     let total = 0;
+    let totalWeight = 0;
+    let totalCube = 0;
 
     cart.forEach((cartItem, index) => {
         const product = allProducts.find(p => p.id === cartItem.id);
         if (!product) return;
 
         const itemTotal = product.price * cartItem.quantity;
+        const itemWeight = (product.weight || 0) * cartItem.quantity;
+        const itemCube = (product.cube || 0) * cartItem.quantity;
         total += itemTotal;
+        totalWeight += (product.weight || 0) * cartItem.quantity;
+        totalCube += (product.cube || 0) * cartItem.quantity;
 
         const el = document.createElement('div');
         el.className = 'cart-item';
@@ -572,7 +583,15 @@ function renderCart() {
             <img src="${cartImage}" class="cart-item-image">
             <div class="cart-item-info">
                 <div class="cart-item-name">${product.name}</div>
-                <div class="cart-item-price">${formatPrice(product.price)}</div>
+               <div class="cart-item-meta">
+                Упаковка: ${product.pack_qty || "-"} шт<br>
+                Вес: ${itemWeight.toFixed(2)} кг<br>
+                Куб: ${itemCube.toFixed(3)} м³
+                </div>
+                <div class="cart-item-price">
+                ${formatPrice(product.price)} × ${cartItem.quantity} =
+                ${formatPrice(itemTotal)}
+                </div>
                 <div class="cart-item-controls">
                     <button class="cart-qty-btn" data-id="${product.id}" data-change="-1">-</button>
                     <span class="cart-qty">${cartItem.quantity}</span>
@@ -604,7 +623,11 @@ function renderCart() {
         container.appendChild(el);
     });
 
-    document.getElementById('cart-total-amount').textContent = formatPrice(total);
+    document.getElementById('cart-total-amount').innerHTML = `
+    ${formatPrice(total)}<br>
+    Вес: ${totalWeight.toFixed(2)} кг<br>
+    Куб: ${totalCube.toFixed(3)} м³
+    `;
 }
 
 async function saveCart() {
