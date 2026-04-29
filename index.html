@@ -88,17 +88,42 @@
             <h2 class="page-title">Профиль</h2>
             <div class="profile-content">
                 <div class="profile-info">
-                    <div class="profile-item">
-                        <span class="profile-label">Имя:</span>
-                        <span class="profile-value" id="user-name">Загрузка...</span>
+                    <!-- View Mode -->
+                    <div id="profile-view">
+                        <div class="profile-item">
+                            <span class="profile-label">Имя:</span>
+                            <span class="profile-value" id="user-name">Не указано</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Телефон:</span>
+                            <span class="profile-value" id="user-phone">Не указан</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Город:</span>
+                            <span class="profile-value" id="user-city">Не указан</span>
+                        </div>
+                        <button class="profile-edit-btn" onclick="openProfileEdit()">
+                            ✏️ Изменить данные
+                        </button>
                     </div>
-                    <div class="profile-item">
-                        <span class="profile-label">Телефон:</span>
-                        <span class="profile-value" id="user-phone">Загрузка...</span>
-                    </div>
-                    <div class="profile-item">
-                        <span class="profile-label">Город:</span>
-                        <span class="profile-value" id="user-city">Загрузка...</span>
+                    <!-- Edit Mode -->
+                    <div id="profile-edit" class="hidden">
+                        <div class="profile-edit-field">
+                            <label class="profile-edit-label">Имя</label>
+                            <input type="text" id="edit-name" class="profile-edit-input" placeholder="Введите имя">
+                        </div>
+                        <div class="profile-edit-field">
+                            <label class="profile-edit-label">Телефон</label>
+                            <input type="tel" id="edit-phone" class="profile-edit-input" placeholder="+998 ...">
+                        </div>
+                        <div class="profile-edit-field">
+                            <label class="profile-edit-label">Город</label>
+                            <input type="text" id="edit-city" class="profile-edit-input" placeholder="Введите город">
+                        </div>
+                        <div class="profile-edit-actions">
+                            <button class="profile-cancel-btn" onclick="closeProfileEdit()">Отмена</button>
+                            <button class="profile-save-btn" onclick="saveProfileEdit()">Сохранить</button>
+                        </div>
                     </div>
                 </div>
                 <div class="profile-orders">
@@ -207,6 +232,17 @@
                 <p id="order-modal-date" class="order-modal-date"></p>
                 <div id="order-modal-items" class="order-modal-items"></div>
                 <div id="order-modal-total" class="order-modal-total"></div>
+                <button class="repeat-order-btn" onclick="showRepeatOrderConfirm()">🔄 Повторить заказ</button>
+            </div>
+        </div>
+        <!-- Repeat confirm inside modal overlay -->
+        <div id="repeat-order-confirm" class="repeat-confirm-overlay hidden">
+            <div class="repeat-confirm-box">
+                <p class="repeat-confirm-text">Вы уверены, что хотите повторить заказ? Текущие товары в корзине будут удалены.</p>
+                <div class="repeat-confirm-buttons">
+                    <button class="confirmation-btn cancel-btn" onclick="closeRepeatOrderConfirm()">Отмена</button>
+                    <button class="confirmation-btn confirm-btn" onclick="confirmRepeatOrder()">Да, повторить</button>
+                </div>
             </div>
         </div>
     </div>
