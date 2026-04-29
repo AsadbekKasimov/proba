@@ -1117,3 +1117,134 @@ line-height:1.4;
     font-weight: 500;
     color: var(--text-gray);
 }
+
+/* Repeat Order Button */
+.repeat-order-btn {
+    width: 100%;
+    margin-top: 16px;
+    padding: 14px;
+    background: var(--primary-color);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+.repeat-order-btn:active { background: var(--primary-hover); }
+
+/* Repeat Confirm Overlay (inside modal) */
+.repeat-confirm-overlay {
+    position: absolute;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 20px;
+    z-index: 10;
+}
+.repeat-confirm-overlay.hidden { display: none; }
+.repeat-confirm-box {
+    background: #fff;
+    border-radius: 16px;
+    padding: 24px 20px;
+    margin: 20px;
+    text-align: center;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.18);
+}
+.repeat-confirm-text {
+    font-size: 15px;
+    color: var(--text-dark);
+    margin-bottom: 20px;
+    line-height: 1.5;
+}
+.repeat-confirm-buttons {
+    display: flex;
+    gap: 10px;
+}
+.repeat-confirm-buttons .confirmation-btn {
+    flex: 1;
+}
+
+/* Make order-detail-modal-content position relative for overlay */
+.order-detail-modal-content {
+    position: relative;
+}
+
+/* Profile Edit Button */
+.profile-edit-btn {
+    width: 100%;
+    margin-top: 14px;
+    padding: 12px;
+    background: transparent;
+    border: 1.5px solid var(--primary-color);
+    color: var(--primary-color);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background 0.15s, color 0.15s;
+}
+.profile-edit-btn:active {
+    background: var(--primary-color);
+    color: #fff;
+}
+
+/* Profile Edit Form */
+.profile-edit-field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 12px 0;
+    border-bottom: 1px solid var(--border-color);
+}
+.profile-edit-field:last-of-type { border-bottom: none; }
+
+.profile-edit-label {
+    font-size: 12px;
+    color: var(--text-gray);
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.4px;
+}
+.profile-edit-input {
+    border: none;
+    outline: none;
+    font-size: 16px;
+    color: var(--text-dark);
+    background: transparent;
+    padding: 4px 0;
+    font-family: inherit;
+}
+.profile-edit-input::placeholder { color: var(--border-color); }
+
+.profile-edit-actions {
+    display: flex;
+    gap: 10px;
+    margin-top: 16px;
+}
+.profile-cancel-btn {
+    flex: 1;
+    padding: 13px;
+    border: 1.5px solid var(--border-color);
+    background: transparent;
+    color: var(--text-gray);
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.profile-save-btn {
+    flex: 2;
+    padding: 13px;
+    border: none;
+    background: var(--primary-color);
+    color: #fff;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.profile-save-btn:active { background: var(--primary-hover); }
