@@ -786,16 +786,57 @@ function saveFavorites() {
 
 // Profile
 function loadUserProfile() {
+    const saved = JSON.parse(localStorage.getItem('userProfile')) || {};
     const user = tg.initDataUnsafe?.user;
-    
-    if (user) {
-        document.getElementById('user-name').textContent = user.first_name + (user.last_name ? ' ' + user.last_name : '');
-        document.getElementById('user-phone').textContent = user.username ? '@' + user.username : 'Не указан';
-        document.getElementById('user-city').textContent = 'Ташкент';
-    } else {
-        document.getElementById('user-name').textContent = 'Гость';
-        document.getElementById('user-phone').textContent = 'Не указан';
-        document.getElementById('user-city').textContent = 'Не указан';
+
+    // Name: prefer saved, then Telegram, then default
+    const name = saved.name || (user ? (user.first_name + (user.last_name ? ' ' + user.last_name : '')) : null) || 'Не указано';
+    const phone = saved.phone || (user && user.username ? '@' + user.username : null) || 'Не указан';
+    const city = saved.city || 'Не указан';
+
+    document.getElementById('user-name').textContent = name;
+    document.getElementById('user-phone').textContent = phone;
+    document.getElementById('user-city').textContent = city;
+}
+
+function openProfileEdit() {
+    const name = document.getElementById('user-name').textContent;
+    const phone = document.getElementById('user-phone').textContent;
+    const city = document.getElementById('user-city').textContent;
+
+    document.getElementById('edit-name').value = (name === 'Не указано') ? '' : name;
+    document.getElementById('edit-phone').value = (phone === 'Не указан') ? '' : phone;
+    document.getElementById('edit-city').value = (city === 'Не указан') ? '' : city;
+
+    document.getElementById('profile-view').classList.add('hidden');
+    document.getElementById('profile-edit').classList.remove('hidden');
+}
+
+function closeProfileEdit() {
+    document.getElementById('profile-edit').classList.add('hidden');
+    document.getElementById('profile-view').classList.remove('hidden');
+}
+
+function saveProfileEdit() {
+    const name = document.getElementById('edit-name').value.trim();
+    const phone = document.getElementById('edit-phone').value.trim();
+    const city = document.getElementById('edit-city').value.trim();
+
+    const profile = {
+        name: name || null,
+        phone: phone || null,
+        city: city || null
+    };
+    localStorage.setItem('userProfile', JSON.stringify(profile));
+
+    document.getElementById('user-name').textContent = name || 'Не указано';
+    document.getElementById('user-phone').textContent = phone || 'Не указан';
+    document.getElementById('user-city').textContent = city || 'Не указан';
+
+    closeProfileEdit();
+
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
     }
 }
 
@@ -827,7 +868,10 @@ function loadUserOrders() {
     });
 }
 
+let currentOpenOrder = null;
+
 function openOrderModal(order) {
+    currentOpenOrder = order;
     const modal = document.getElementById('order-detail-modal');
     const titleEl = document.getElementById('order-modal-title');
     const dateEl = document.getElementById('order-modal-date');
@@ -879,6 +923,35 @@ function openOrderModal(order) {
 
 function closeOrderModal() {
     document.getElementById('order-detail-modal').classList.add('hidden');
+    currentOpenOrder = null;
+}
+
+function showRepeatOrderConfirm() {
+    document.getElementById('repeat-order-confirm').classList.remove('hidden');
+}
+
+function closeRepeatOrderConfirm() {
+    document.getElementById('repeat-order-confirm').classList.add('hidden');
+}
+
+function confirmRepeatOrder() {
+    if (!currentOpenOrder) return;
+    const items = currentOpenOrder.items || [];
+    cart = items.map(item => ({
+        id: item.id,
+        name: item.name,
+        price: item.price,
+        image: item.image,
+        quantity: item.quantity || item.qty || 1
+    }));
+    saveCart();
+    updateCartBadge();
+    closeRepeatOrderConfirm();
+    closeOrderModal();
+    switchPage('cart');
+    if (window.Telegram?.WebApp?.HapticFeedback) {
+        window.Telegram.WebApp.HapticFeedback.notificationOccurred('success');
+    }
 }
 
 // Checkout
