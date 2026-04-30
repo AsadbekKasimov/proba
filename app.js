@@ -453,9 +453,9 @@ function openModal(product) {
     modalDots.innerHTML = images.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}"></span>`).join('');
     
     const qtyInput = document.getElementById('qty-input');
-    qtyInput.value = '1';
+    qtyInput.value = '';
     qtyInput.min = '';
-    qtyInput.step = product.pack_qty || 1;
+    qtyInput.step = 1;
     
     modal.classList.remove('hidden');
 }
