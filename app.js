@@ -453,7 +453,7 @@ function openModal(product) {
     modalDots.innerHTML = images.map((_, i) => `<span class="dot ${i === 0 ? 'active' : ''}"></span>`).join('');
     
     const qtyInput = document.getElementById('qty-input');
-    qtyInput.value = '';
+    qtyInput.value = '1';
     qtyInput.min = '';
     qtyInput.step = product.pack_qty || 1;
     
