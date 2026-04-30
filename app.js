@@ -454,7 +454,7 @@ function openModal(product) {
     
     const qtyInput = document.getElementById('qty-input');
     qtyInput.value = '';
-    qtyInput.min = '';
+    qtyInput.min = '1';
     qtyInput.step = 1;
     
     modal.classList.remove('hidden');
