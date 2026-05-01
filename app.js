@@ -851,7 +851,7 @@ function loadUserOrders() {
     
     ordersList.innerHTML = '';
     
-    orders.forEach(order => {
+    [...orders].reverse().forEach(order => {
         const orderEl = document.createElement('div');
         orderEl.className = 'order-item';
         orderEl.innerHTML = `
