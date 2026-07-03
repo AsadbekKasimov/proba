@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Каталог товаров</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+
+<body>
+	<div id="loader">
+   <img src="https://asadbekkasimov.github.io/kafolatdillers/images/logo.png" class="loader-logo">
+   <div class="loader-text">Загрузка ...</div>
+	</div>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-content">
+            <img src="https://asadbekkasimov.github.io/kafolatdillers/images/logo.png" alt="Logo" class="logo">
+            <h1 class="header-title">Kafolat</h1>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Catalog Page -->
+        <div id="catalog-page" class="page active">
+            <!-- Sticky Search & Groups Container -->
+            <div class="sticky-header">
+                <!-- Search Bar -->
+                <div class="search-container">
+                    <input type="text" id="search-input" class="search-input" placeholder="Поиск товаров...">
+                </div>
+
+                <!-- Group Navigation Buttons -->
+                <div class="groups-nav" id="groups-nav">
+                    <!-- Будут добавлены динамически -->
+                </div>
+            </div>
+
+            <!-- Products by Groups -->
+            <div class="products-by-groups" id="products-by-groups">
+                <!-- Группы товаров будут загружены здесь -->
+            </div>
+        </div>
+
+        <!-- Favorites Page -->
+        <div id="favorites-page" class="page">
+            <h2 class="page-title">Избранные товары</h2>
+            <div class="favorites-container">
+                <div class="products-grid" id="favorites-grid">
+                    <div class="empty-state">
+                        <p>У вас пока нет избранных товаров</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Profile Page -->
+        <div id="profile-page" class="page">
+            <h2 class="page-title">Профиль</h2>
+            <div class="profile-content">
+                <div class="profile-info">
+                    <!-- View Mode -->
+                    <div id="profile-view">
+                        <div class="profile-item">
+                            <span class="profile-label">Имя:</span>
+                            <span class="profile-value" id="user-name">Не указано</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Телефон:</span>
+                            <span class="profile-value" id="user-phone">Не указан</span>
+                        </div>
+                        <div class="profile-item">
+                            <span class="profile-label">Город:</span>
+                            <span class="profile-value" id="user-city">Не указан</span>
+                        </div>
+                        <button class="profile-edit-btn" onclick="openProfileEdit()">
+                             Изменить данные
+                        </button>
+                    </div>
+                    <!-- Edit Mode -->
+                    <div id="profile-edit" class="hidden">
+                        <div class="profile-edit-field">
+                            <label class="profile-edit-label">Имя</label>
+                            <input type="text" id="edit-name" class="profile-edit-input" placeholder="Введите имя">
+                        </div>
+                        <div class="profile-edit-field">
+                            <label class="profile-edit-label">Телефон</label>
+                            <input type="tel" id="edit-phone" class="profile-edit-input" placeholder="+998 ...">
+                        </div>
+                        <div class="profile-edit-field">
+                            <label class="profile-edit-label">Город</label>
+                            <input type="text" id="edit-city" class="profile-edit-input" placeholder="Введите город">
+                        </div>
+                        <div class="profile-edit-actions">
+                            <button class="profile-cancel-btn" onclick="closeProfileEdit()">Отмена</button>
+                            <button class="profile-save-btn" onclick="saveProfileEdit()">Сохранить</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="profile-orders">
+                    <h3>Последние заказы</h3>
+                    <div id="orders-list" class="orders-list">
+                        <p class="empty-state">У вас пока нет заказов</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Bottom Navigation -->
+    <nav class="bottom-nav">
+        <button class="nav-btn active" data-page="catalog">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="3" y="3" width="7" height="7"></rect>
+                <rect x="14" y="3" width="7" height="7"></rect>
+                <rect x="14" y="14" width="7" height="7"></rect>
+                <rect x="3" y="14" width="7" height="7"></rect>
+            </svg>
+            <span>Каталог</span>
+        </button>
+        <button class="nav-btn" data-page="favorites">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"></path>
+            </svg>
+            <span>Избранные</span>
+        </button>
+        <button class="nav-btn" data-page="profile">
+            <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+                <circle cx="12" cy="7" r="4"></circle>
+            </svg>
+            <span>Профиль</span>
+        </button>
+    </nav>
+
+    <!-- Product Modal -->
+    <div id="product-modal" class="modal hidden">
+        <div class="modal-content">
+            <button class="modal-close" id="modal-close">&times;</button>
+            <div class="modal-body">
+               
+ 	<div class="slider modal-slider" id="modal-slider" data-index="0">
+  	  <div class="slides" id="modal-slides"></div>
+  	  <div class="dots" id="modal-dots"></div>
+		</div>
+
+                <h3 id="modal-title"></h3>
+                <p id="modal-description"></p>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
