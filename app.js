@@ -11,7 +11,7 @@ let currentCartIndex = null;
 
 // Fetch products from Google Sheets
 async function fetchProducts() {
-    const res = await fetch("https://script.google.com/macros/s/AKfycbyhq8ggnr8zcQqnZrHjYbHQuk4A7RBPLS-n9GP1ETplnSTtiq9QMGeLgzNxgjp7mmVPqw/exec");
+    const res = await fetch("https://script.google.com/macros/s/AKfycbyLPVc-tTaeJT4maw4jhMsKBCI22iP6P_GG0SuDqrhM5bCYYhGiPog0pqCS2JK2DXOKIw/exec");
     productsData = await res.json();
     allProducts = Object.values(productsData).flat().map(product => {
 
